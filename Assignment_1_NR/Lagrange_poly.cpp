@@ -8,7 +8,6 @@ std::vector <double> linspace(double a, double b, double num)
 {
 	// create a vector of length num
 	std::vector <double> v(num);
-	double tmp = 0.0;
 
 
 	// now assign the values to the vector

@@ -2,9 +2,10 @@
 #include <vector>
 #include<algorithm>
 
-double num = 2.5; //change num to 5 for part b for this estimation for f(x)
+double num_1 = 2.5;
+double num_2 = 5.0;
 
-double Interp(std::vector <double> f_interp, const double dx, const double x, const int n)
+double Interp(std::vector <double> f_interp, const double dx, const double x, const int n,const double num)
 // first space is to create an empy vector for the data, dx is delta x, x is the x in which you which to solve, n is the number of terms for the expansion 
 {
 	for (int k = 0; k < n; k++)
@@ -40,12 +41,21 @@ int main()
 	std::vector <double> f_interp;
 	int n = 10;
 	double dx = 0.1;
-	double x = num * dx;
 
-	double f_tilde = Interp(f_interp,dx,x,n);
-	double f_x = num * x + 5;
+	double x_1 = num_1 * dx;
 
-	std::cout << "f(x) = " << f_x << "\n";
-	std::cout << "f_tilde = " << f_tilde;
+	double f_tilde_1 = Interp(f_interp,dx,x_1,n,num_1);
+	double f_x_1 = num_1 * x_1 + 5;
+
+	std::cout << "f(x) = " << f_x_1 << "\n";
+	std::cout << "f_tilde = " << f_tilde_1 << "\n";
+
+	double x_2 = num_2 * dx;
+
+	double f_tilde_2 = Interp(f_interp, dx, x_2, n, num_2);
+	double f_x_2 = num_2 * x_2 + 5;
+
+	std::cout << "f(x) = " << f_x_2 << "\n";
+	std::cout << "f_tilde = " << f_tilde_2;
 	return 0;
 }

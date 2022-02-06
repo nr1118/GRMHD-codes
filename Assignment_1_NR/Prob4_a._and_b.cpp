@@ -35,7 +35,7 @@ std:: vector <double> alpha(int x, int n)
 				den *= double(i - j);
 			}
 		}
-		alph[i - 1] =(1.0/2.0)*double(num)/double(den);
+		alph[i - 1] =pow(0.5,n-1)**double(num)/double(den);
 	}
 
 	return alph;

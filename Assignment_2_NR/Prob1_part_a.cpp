@@ -36,7 +36,7 @@ int main()
 
 
 
-	Data_Mesh <double> My_Data(); // sets the MY_Data vector to take data types of the double kind
+	Mesh mymesh(n, Ext); // initializes the object of the class Mesh called mymesh
 
 
 

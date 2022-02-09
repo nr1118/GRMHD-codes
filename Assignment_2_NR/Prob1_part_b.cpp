@@ -52,11 +52,19 @@ int main()
 
 	Data_Mesh<double> mDm(n, Ext); //creates an object of the class Data_Mesh and specifies a type since we did not when making the template
 	
+	{
+		std::vector<double>& Data = mDm.Get_Mod_Data();
+		Data = { 1.0 };
+	}
 	
-	const std::vector<double>& Data = mDm.Get_Const_Data();
-	Data[0]=1.0;
-	
-	
+	{
+		const std::vector<double>& Data = mDm.Get_Const_Data();
+	}
+
+	for (double x : mDm.Get_Const_Data())
+	{
+		std::cout << x;
+	}
 
 	return 0;
 }

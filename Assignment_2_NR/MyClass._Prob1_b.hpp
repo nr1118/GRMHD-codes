@@ -29,6 +29,5 @@ public:
 	const std::vector <T>& Get_Const_Data() const;
 	std::vector <T>& Get_Mod_Data();
 private: 
-	 const std::vector <T> Const_Data; //creates a vector of type T called Const_Data
-	 std::vector<T> Mod_Data;
+	 std::vector<T> Data;
 };

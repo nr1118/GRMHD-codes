@@ -93,7 +93,7 @@ int main()
 	Patch patch(n, Ext, a, b);
 
 
-	//std::cout << Mesh::Get_grid_pts()[0];
+	
 
 	for (int j = 0; j < n; j++)
 	{
@@ -106,7 +106,6 @@ int main()
 	}
 
 
-	//std::cout << Mesh(n,Ext)::Get_grid_pts()[0];
 	
 	//std::cout << patch.Get_up_bound();
 

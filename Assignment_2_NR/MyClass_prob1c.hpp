@@ -48,4 +48,3 @@ private:
 
 };
 
-//should I have it such that a and b must be the same for each dimension or should that not necessarily be true?

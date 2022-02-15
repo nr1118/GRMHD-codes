@@ -25,9 +25,9 @@ std::vector<int>Mesh::Get_grid_pts()  //this function should return the number o
 
 int Mesh::Get_total_grid_pts() const //This functions simply just sums up the number of points per dimension
 {
-	int x = 0;
+	int x = 1;
 	for (int i = 0; i < dim; i++) {
-		x = x + Extents[i];
+		x = x * Extents[i];
 	}
 	return x;
 }

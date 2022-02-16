@@ -144,7 +144,7 @@ int main()
 
 	Data_Mesh<double> H_scaled = H*Z;
 
-	for (int i = 0; i < A.Get_total_grid_pts(); i++)
+	for (int i = 0; i < H.Get_total_grid_pts(); i++)
 	{
 		std::cout << H_scaled.Get_Mod_Data()[i] << "\n";
 	}

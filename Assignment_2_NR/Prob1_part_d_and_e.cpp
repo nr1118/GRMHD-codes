@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
-#include "MyClass.hpp" //imports class from the header file
+#include "MyClass_Prob1_d_and_e.hpp" //imports class from the header file
 
 Mesh::Mesh(const int n, std::vector <int> Ext):dim(n),Extents(Ext)
 {

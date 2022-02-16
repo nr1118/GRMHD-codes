@@ -29,11 +29,6 @@ public:
 	{
 
 		Data.resize(Get_total_grid_pts());
-		if (Data.size() != this->Get_total_grid_pts())
-		{
-			std::cout << "ERROR: Make sure the number of data points is equal to Total number of grid points!";
-			exit(1);
-		}
 	}
 	//~Data_Mesh::Data_Mesh(void):Mesh(n,Ext) {};
 	const std::vector <T>& Get_Const_Data(){return Data;}
@@ -55,6 +50,16 @@ public:
 				std::cout << "ERROR: The number of grid points for a dimension(s) of A and B do not match!";
 				exit(1);
 			}
+		}
+		if (Data.size() != this->Get_total_grid_pts())
+		{
+			std::cout << "ERROR: The size of the data inputs do not match the total number of grid points! ";
+			exit(1);
+		}
+		if (B.Data.size() != this->Get_total_grid_pts())
+		{
+			std::cout << "ERROR: The size of the data inputs do not match the total number of grid points! ";
+			exit(1);
 		}
 	
 		
@@ -97,6 +102,16 @@ public:
 				exit(1);
 			}
 		}
+		if (Data.size() != this->Get_total_grid_pts())
+		{
+			std::cout << "ERROR: The size of the data inputs do not match the total number of grid points! ";
+			exit(1);
+		}
+		if (B.Data.size() != this->Get_total_grid_pts())
+		{
+			std::cout << "ERROR: The size of the data inputs do not match the total number of grid points! ";
+			exit(1);
+		}
 		Data_Mesh<T> C(this->Get_dim(), this->Get_grid_pts()); // is this really even needed? and does data need to be initiliazed?
 		if (typeid(T) == typeid(bool))
 		{
@@ -122,6 +137,11 @@ public:
 	}
 	Data_Mesh<T> operator *(const T& B) //Defines how to multiply a class by a scalar
 	{
+		if (Data.size() != this->Get_total_grid_pts())
+		{
+			std::cout << "ERROR: The size of the data inputs do not match the total number of grid points! ";
+			exit(1);
+		}
 		Data_Mesh<T> C(this->Get_dim(), this->Get_grid_pts());
 		if (typeid(T) == typeid(bool)) 
 		{

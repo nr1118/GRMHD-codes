@@ -89,7 +89,7 @@ public:
 
 	}
 
-	Data_Mesh<T> operator +=(const Data_Mesh <T> &B) const //Defines how to add an empty class to a class via +=
+	Data_Mesh<T> operator +=(const Data_Mesh <T> &B)  //Defines how to add an empty class to a class via +=
 	{
 		if (this->Get_dim() != B.Get_dim())
 		{
@@ -130,7 +130,6 @@ public:
 			}
 		}
 		
-		return Data;
 	}
 	Data_Mesh<T> operator *(const T& B) const //Defines how to multiply a class by a scalar
 	{

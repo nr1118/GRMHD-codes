@@ -185,12 +185,6 @@ class  Scheme
 {
 public:
 
-	void RK3(const double& dx, const std::vector<Data_Mesh<double>>& U, std::vector<Data_Mesh<double>>& dUdx)const
-	{
-		
-
-	}
-
 	void Up_diff(const double& dx, const std::vector<Data_Mesh<double>>& U, std::vector<Data_Mesh<double>>& dUdx) const
 	{
 		for (int k = 0; k < U.size(); k++)

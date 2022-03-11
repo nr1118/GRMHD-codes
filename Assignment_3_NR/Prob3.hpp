@@ -376,7 +376,8 @@ public:
 		//It seems the error happens when I try to make this 
 		if (N == 2)
 		{
-			alpha.push_back(0.5,0.5);
+			alpha.push_back(0.5);
+			alpha.push_back(0.5);
 		}
 	
 		for (int i = 0; i < U.size(); i++)// for each coordinate so in this case it will just be 1
@@ -389,7 +390,7 @@ public:
 
 				for (int k = 0; k <= n; k++)
 				{
-					U[i] = U_0[i] + dUdt[k][i]*0.5 * dt;
+					U[i] = U_0[i] + dUdt[k][i]*alpha[k] * dt;
 				}
 
 				

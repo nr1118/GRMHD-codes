@@ -376,7 +376,7 @@ public:
 		//It seems the error happens when I try to make this 
 		if (N == 2)
 		{
-			alpha = { 1 / 2,1 / 2 };
+			alpha.push_back(0.5,0.5);
 		}
 	
 		for (int i = 0; i < U.size(); i++)// for each coordinate so in this case it will just be 1

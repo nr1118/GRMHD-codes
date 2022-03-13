@@ -2,7 +2,7 @@
 #include <vector>
 #include <list>
 #include <cmath>
-#include "MyClass.hpp" //imports class from the header file
+#include "Prob3.hpp" //imports class from the header file
 
 
 double pi = 3.14159265358979323846; //tried to use M_PI, but kept getting an error

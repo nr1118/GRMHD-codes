@@ -224,9 +224,9 @@ public:
 		}
 	}
 
-	void Center_diff(const double& dx, const std::vector<Data_Mesh<double>>& U, std::vector<Data_Mesh<double>>& dUdx) const
+void Center_diff(const double& dx, const std::vector<Data_Mesh<double>>& U, std::vector<Data_Mesh<double>>& dUdx) const
 	{
-		for (int k = 0; k < U.size();k++)
+		for (int k = 0; k < U.size(); k++)
 		{
 			Data_Mesh<double> x = U[k];
 			Data_Mesh<double>& y = dUdx[k];
@@ -237,25 +237,23 @@ public:
 			{
 				if (i == 0)
 				{
-					y.Get_Mod_Data()[i] = (Z[i + 1] - Z[Z.size() - 2]) * (1 / (2 * dx)); // need Z.size()-2 since the 0th index and last index are the same point!! The same reasoning applies for other side.
+					y.Get_Mod_Data()[i] = (pow(Z[i + 1],2) - pow(Z[Z.size() - 2],2)) * (1 / (2 * dx)); // need Z.size()-2 since the 0th index and last index are the same point!! The same reasoning applies for other side.
 					continue;
 				}
 				if (i == Z.size() - 1)
 				{
-					y.Get_Mod_Data()[i] = (Z[1] - Z[i-1]) * (1 / (2 * dx));
+					y.Get_Mod_Data()[i] = (pow(Z[1],2) - pow(Z[i - 1],2)) * (1 / (2 * dx));
 					continue;
 				}
 
-				y.Get_Mod_Data()[i] = (Z[i + 1] - Z[i - 1]) * (1 / (2 * dx));
-
+				y.Get_Mod_Data()[i] = (pow(Z[i + 1],2) - pow(Z[i - 1],2)) * (1 / (2 * dx));
 			}
-
-
 		}
-
 	}
 
 };
+
+
 
 // TO DO: I need to start the sum from i=1 and not i=0 since U[i-1] is an issue. When I try to use an if statement to re-idneify the point it still does not like my solution.
 class RhsU
@@ -268,33 +266,26 @@ public:
 
 		Method.Center_diff(dx, U, dUdx);
 
-
 		for (int i = 0; i < U.size(); i++)
 		{
 			dUdt[i] = dUdx[i] * -1 * c; // this says that dUdt = -c dUdx
 		}
 	}
 
-	void Rhs_Burgers(const double& dx,const double& v, const double& c, const std::vector<Data_Mesh<double>>& U, std::vector<Data_Mesh<double>>& dUdt, const Scheme& Method) const
+
+	void Rhs_Burgers(const double& dx, const double& c, const std::vector<Data_Mesh<double>>& U, std::vector<Data_Mesh<double>>& dUdt, const Scheme& Method) const
 	{
-		std::vector<Data_Mesh<double>> dUdx = U;
+		std::vector<Data_Mesh<double>> dU2dx = U;
 
-		Method.Center_diff(dx, U, dUdx);
-
-		std::vector<Data_Mesh <double>> d2Udx2 = dUdx;
-
-		Method.Center_diff(dx, dUdx, d2Udx2);
+		Method.Center_diff(dx, U, dU2dx); // this center differ takes U^2(x_i) = U^2(x_i+1)-U^2(x_i-1)/2*dx
 
 		for (int i = 0; i < U.size(); i++)
 		{
-			dUdt[i] = dUdx[i] * -1 * c+ d2Udx2[i]*v; // this says that dUdt = -c dUdx+ v d2Udx2
+			dUdt[i] = dU2dx[i] * -0.5; // this says that dUdt = -c dUdx
 		}
-
-
 	}
-
-	//this class will take into account what dudx is and say that dudt = -c (part a) for example
 };
+
 
 class RhsComputation :public RhsU
 {
@@ -303,9 +294,9 @@ class RhsComputation :public RhsU
 public:
 	//RhsComputation(); //constructor
 
-	void Rhs(const double& dx, const double&v, const double& c, const std::vector<Data_Mesh<double>>& U, std::vector<Data_Mesh<double>>& dUdt, const Scheme& Method) const
+	void Rhs(const double& dx, const double& c, const std::vector<Data_Mesh<double>>& U, std::vector<Data_Mesh<double>>& dUdt, const Scheme& Method) const
 	{
-		RhsU::Rhs_Burgers(dx,v, c, U, dUdt, Method);
+		RhsU::Rhs_Burgers(dx, c, U, dUdt, Method);
 	}
 
 
@@ -314,54 +305,17 @@ public:
 
 class Timestepper
 {	//the function of this class is to just evolve the equation from t to t+dt
+
 public:
 	//Timestepper(); //constructor, might need if we need to initialize an object
 
-	void Take_Ntime_steps_Euler(const int& N_steps, double& t_0, const double& dx, const double&v, const double& c, const double& dt, std::vector<Data_Mesh<double>>& U, std::vector<double>& U_store, const RhsComputation& RhsComp, const Scheme& Method)
-	{
-		std::vector<Data_Mesh<double>> dUdt = U;
-		for (int i = 0; i < N_steps; i++)
-		{
-			t_0 = t_0 + dt;
-			std::vector<Data_Mesh<double>> dUdt = U;
-
-			RhsComp.Rhs_Burgers(dx,v, c, U, dUdt, Method);
-
-			for (int j = 0; j < U.size(); j++)
-			{
-				U[j] = U[j] + dUdt[j] * dt;
-
-
-			}
-
-
-			if (i % 2 == 0)
-			{
-
-
-				for (Data_Mesh<double>x : U)
-				{
-					for (int i = 0; i < x.Get_Const_Data().size(); i++)
-					{
-						U_store.push_back(x.Get_Const_Data()[i]);
-
-					}
-
-
-				}
-				U_store.push_back(t_0);
-			}
-
-
-		}
-	}
-	void Take_time_step_Euler(double& t_0, const double& dx,const double&v, const double& c, const double& dt, std::vector<Data_Mesh<double>>& U, const RhsComputation& RhsComp, const Scheme& Method) const
+	void Take_time_step_Euler(double& t_0, const double& dx, const double& c, const double& dt, std::vector<Data_Mesh<double>>& U, const RhsComputation& RhsComp, const Scheme& Method) const
 	{
 
 		t_0 = t_0 + dt;
 		std::vector<Data_Mesh<double>> dUdt = U;
 
-		RhsComp.Rhs_Burgers(dx,v, c, U, dUdt, Method);
+		RhsComp.Rhs_Burgers(dx, c, U, dUdt, Method);
 
 		for (int i = 0; i < U.size(); i++)
 		{
@@ -369,7 +323,7 @@ public:
 		}
 	}
 	//N is the RK order, so far only set up for N=2
-	void Take_time_step_RK2_loop(const int N, double& t_0, const double& dx,const double&v, const double& c, const double& dt, std::vector<Data_Mesh<double>>& U, const RhsComputation& RhsComp, const Scheme& Method) const
+	void Take_time_step_RK2(const int N, double& t_0, const double& dx, const double& c, const double& dt, std::vector<Data_Mesh<double>>& U, const RhsComputation& RhsComp, const Scheme& Method) const
 	{
 		std::vector<Data_Mesh<double>> U_0 = U; // yes I have tried a reference here although I did not think it would help and it did not. 
 
@@ -385,7 +339,7 @@ public:
 		{
 				for (int n = 0; n < N; n++)
 				{
-					RhsComp.Rhs_Burgers(dx,v, c, U, dUdt[n], Method);
+					RhsComp.Rhs_Burgers(dx, c, U, dUdt[n], Method);
 					for (int k = 0; k <= n; k++)
 					{
 						sum[n][i] = sum[n][i]+ dUdt[k][i] * ckn[n][k] * alpha[k] * dt; // for some reason my += operator is not working so this is my best choice for now. 

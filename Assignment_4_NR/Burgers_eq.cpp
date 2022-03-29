@@ -85,7 +85,7 @@ double sin_func(const double d) {
 int main()
 {
 	const int n = 1; //initializing the dimension n
-	const std::vector <int> Ext = { 10 }; //initializing the number of grid points along each dimension {t,x}
+	const std::vector <int> Ext = { 100}; //initializing the number of grid points along each dimension {t,x}
 
 
 	 //creates an object of the class Mesh and this will be used call anything within the public part of Mesh.
@@ -109,35 +109,39 @@ int main()
 	for (int i = 0; i < mymesh.Get_total_grid_pts(); i++)
 	{
 		double x = patch.Get_coords()[0][i];
-		Data[i] = sin_func(x);
+		Data[i] = sin_func(x)+1.2;
 	}
 
 	RhsComputation RhsComp;
 	Scheme Method;
 	Timestepper Euler;
-	const int N_steps = 20;
+	const int N_steps = 400;
 	double t_0 = 0;
 	const double c = 1.0;
-	const double v = 0.5;
 	const double dx = patch.Get_dx(); //added a new funciton in Patch class that ensures that  dx is fixed
-	const double dt = dx/2;
+	const double dt = dx/4;
 	std::vector<Data_Mesh<double>> U(n, mDm); //U(number of initial conditions, mDm Data_Mesh)
 
 
 
 	for (int i = 0; i < N_steps; i++)
 	{
-		Euler.Take_time_step_RK2_loop(2,t_0, dx,v, c, dt, U, RhsComp, Method);
-		std::cout << "The time is = " << t_0 << "\n";
+		Euler.Take_time_step_RK2(2,t_0, dx, c, dt, U, RhsComp, Method);
+		
 
-		for (Data_Mesh<double>x : U)
+		if(i%10== 0)
 		{
-			for (int j = 0; j < x.Get_Mod_Data().size(); j++)
+			std::cout << "The time is = " << t_0 << "\n";
+			for (Data_Mesh<double>x : U)
 			{
-				std::cout << x.Get_Mod_Data()[j] << "\n";
+				for (int j = 0; j < x.Get_Mod_Data().size(); j++)
+				{
+					std::cout << x.Get_Mod_Data()[j] << "\n";
 
+				}
 			}
 		}
+
 
 	}
 			

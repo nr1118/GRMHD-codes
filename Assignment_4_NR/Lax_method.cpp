@@ -3,7 +3,7 @@
 #include <list>
 #include <algorithm>
 #include <cmath>
-#include "MyClass.hpp" 
+#include "Lax_method.hpp" 
 
 double pi = 3.14159265358979323846;
 
